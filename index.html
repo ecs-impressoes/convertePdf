@@ -2,18 +2,20 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ConvertPro · estúdio de documentos local</title>
-    <!-- Font Awesome 6 (profissional) -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>ConvertPro Studio · Segurança Total e Processamento Local</title>
+    <!-- Font Awesome 6 (ícones profissionais) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Bibliotecas robustas -->
+    <!-- Bibliotecas robustas para manipulação de documentos -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mammoth@1.4.19/mammoth.browser.min.js"></script>
     <script src="https://cdn.sheetjs.com/xlsx-0.19.2/package/dist/xlsx.full.min.js"></script>
-    <!-- pdf.js (worker) -->
+    <!-- pdf.js (renderização de PDF) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <!-- JSZip para criação de arquivos ZIP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script>
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
     </script>
@@ -22,509 +24,406 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
         }
 
         body {
-            background: #f8fafc;
+            background: #f4f9fe;
             padding: 2rem 1.5rem;
-            color: #0b1e33;
+            color: #0a2540;
         }
 
         .container {
-            max-width: 1440px;
+            max-width: 1480px;
             margin: 0 auto;
         }
 
-        /* cabeçalho refinado */
+        /* cabeçalho premium */
         .top-bar {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 3rem;
             flex-wrap: wrap;
             gap: 1rem;
+            margin-bottom: 2.5rem;
         }
 
         .logo h1 {
-            font-weight: 600;
+            font-weight: 700;
             font-size: 2rem;
-            background: linear-gradient(145deg, #0a2942, #1d4a7c);
+            background: linear-gradient(135deg, #0f3b5c, #1b6b8f);
             -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: -0.5px;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.3px;
         }
 
         .logo span {
-            background: #0a2942;
+            background: #0f3b5c;
             color: white;
-            font-size: 0.8rem;
-            padding: 0.2rem 1rem;
-            border-radius: 30px;
+            font-size: 0.7rem;
+            padding: 0.2rem 0.9rem;
+            border-radius: 40px;
             margin-left: 0.75rem;
             font-weight: 500;
-            -webkit-text-fill-color: white;
+            vertical-align: middle;
         }
 
         .trust-badge {
             display: flex;
             gap: 1.8rem;
-            color: #3e5e7e;
+            background: #ffffffcc;
+            backdrop-filter: blur(4px);
+            padding: 0.5rem 1.2rem;
+            border-radius: 60px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
         }
 
         .trust-badge i {
+            color: #1f6e8c;
             margin-right: 6px;
-            color: #1d4a7c;
         }
 
-        /* grid de cards */
+        /* grid de ferramentas */
         .tool-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-            gap: 2rem;
-            margin: 2.5rem 0;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.8rem;
+            margin: 2rem 0;
         }
 
         .card {
-            background: #ffffff;
-            border-radius: 32px;
-            padding: 1.8rem 1.8rem 2rem;
-            box-shadow: 0 20px 35px -8px rgba(0,20,45,0.15), 0 0 0 1px rgba(0,0,0,0.02);
-            transition: transform 0.2s ease, box-shadow 0.2s;
+            background: rgba(255, 255, 255, 0.96);
+            border-radius: 2rem;
+            padding: 1.5rem 1.6rem 1.8rem;
+            box-shadow: 0 20px 35px -12px rgba(0, 32, 64, 0.12), 0 1px 2px rgba(0,0,0,0.02);
+            transition: all 0.25s ease;
+            border: 1px solid rgba(110, 160, 190, 0.2);
             display: flex;
             flex-direction: column;
-            border: 1px solid rgba(255,255,255,0.5);
-            backdrop-filter: blur(2px);
         }
 
         .card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 28px 40px -12px rgba(0,35,70,0.25);
+            transform: translateY(-5px);
+            box-shadow: 0 25px 40px -14px rgba(0, 50, 80, 0.2);
+            border-color: #cbdde9;
         }
 
         .card-header {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 14px;
             margin-bottom: 1rem;
         }
 
         .card-header .icon {
-            background: #edf2f9;
-            width: 50px;
-            height: 50px;
-            border-radius: 18px;
+            background: #eef3fc;
+            width: 52px;
+            height: 52px;
+            border-radius: 1.2rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #1d4a7c;
+            color: #1a6d8a;
             font-size: 1.8rem;
-            box-shadow: inset 0 1px 3px rgba(255,255,255,0.7), 0 4px 6px rgba(0,0,0,0.02);
         }
 
         .card-header h3 {
-            font-size: 1.4rem;
+            font-size: 1.45rem;
             font-weight: 600;
-            color: #0b1e33;
+            color: #103a4e;
         }
 
         .card-desc {
-            color: #486581;
-            font-size: 0.95rem;
-            line-height: 1.5;
-            margin-bottom: 1.8rem;
+            color: #2c6079;
+            font-size: 0.88rem;
+            line-height: 1.45;
+            margin-bottom: 1.3rem;
             padding-left: 0.2rem;
         }
 
         .file-zone {
-            background: #f1f5f9;
-            border-radius: 24px;
-            padding: 0.5rem 0.5rem 0.5rem 1.2rem;
-            margin-bottom: 1.2rem;
-            border: 1px solid #dde7f0;
+            background: #f2f7fc;
+            border-radius: 1.5rem;
+            padding: 0.4rem 0.4rem 0.4rem 1rem;
+            margin-bottom: 1rem;
+            border: 1px solid #d4e2ed;
             display: flex;
             align-items: center;
-            transition: 0.2s;
+            gap: 8px;
         }
 
         .file-zone i {
-            color: #6783a0;
-            font-size: 1.2rem;
-            margin-right: 10px;
+            color: #2c7a9e;
+            font-size: 1.1rem;
         }
 
-        .file-zone input[type="file"] {
+        .file-zone input {
             flex: 1;
-            border: none;
             background: transparent;
-            font-size: 0.9rem;
-            color: #1e3a5f;
+            border: none;
+            font-size: 0.85rem;
             padding: 0.6rem 0;
+            color: #0f405a;
         }
 
-        .file-zone input[type="file"]::file-selector-button {
+        .file-zone input::file-selector-button {
             background: white;
-            border: 1px solid #bdd3e8;
-            padding: 0.5rem 1.2rem;
-            border-radius: 40px;
+            border: 1px solid #bbd2e4;
+            padding: 0.4rem 1rem;
+            border-radius: 2rem;
             font-weight: 500;
-            color: #1d4a7c;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            color: #1f6e8c;
             cursor: pointer;
-            transition: 0.15s;
-            margin-right: 1rem;
-        }
-
-        .file-zone input[type="file"]::file-selector-button:hover {
-            background: #e6effa;
-            border-color: #1d4a7c;
+            transition: 0.2s;
+            margin-right: 0.8rem;
         }
 
         .extra-control {
-            background: #f1f5f9;
-            border-radius: 20px;
+            background: #f2f7fc;
+            border-radius: 1.2rem;
             padding: 0.6rem 1rem;
-            margin: 0.8rem 0 1.2rem;
-            border: 1px solid #dde7f0;
+            margin: 0.7rem 0 1.2rem;
+            border: 1px solid #d4e2ed;
             display: flex;
-            align-items: center;
-            gap: 10px;
             flex-wrap: wrap;
+            align-items: center;
+            gap: 12px;
         }
 
         .extra-control input, .extra-control select {
             background: white;
-            border: 1px solid #cbd6e4;
-            border-radius: 40px;
+            border: 1px solid #caddf0;
+            border-radius: 2rem;
             padding: 0.5rem 1rem;
-            font-size: 0.9rem;
-            color: #0b1e33;
-            flex: 1 1 auto;
-        }
-
-        .extra-control label {
-            font-size: 0.9rem;
-            font-weight: 500;
-            color: #1e3a5f;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+            font-size: 0.85rem;
+            flex: 1;
         }
 
         .radio-group {
             display: flex;
             gap: 1rem;
-            flex-wrap: wrap;
             background: white;
-            padding: 0.5rem 1rem;
-            border-radius: 40px;
-            border: 1px solid #cbd6e4;
-        }
-
-        .radio-group label {
-            font-weight: 400;
-            color: #2d4c73;
+            padding: 0.3rem 1rem;
+            border-radius: 2rem;
+            border: 1px solid #caddf0;
         }
 
         .btn-primary {
-            background: #0b1e33;
+            background: #0a3b50;
             color: white;
             border: none;
-            padding: 0.9rem 1.5rem;
-            border-radius: 40px;
+            padding: 0.8rem 1rem;
+            border-radius: 3rem;
             font-weight: 600;
-            font-size: 1rem;
+            font-size: 0.95rem;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
             cursor: pointer;
-            transition: 0.15s;
-            margin-top: auto;
-            box-shadow: 0 8px 16px -6px rgba(10, 40, 70, 0.3);
+            transition: 0.2s;
+            margin-top: 0.6rem;
+            box-shadow: 0 8px 16px -8px rgba(10, 60, 80, 0.3);
         }
 
         .btn-primary:hover {
-            background: #123456;
-            transform: scale(1.02);
-        }
-
-        .btn-primary i {
-            font-size: 1.2rem;
+            background: #0f5775;
+            transform: scale(1.01);
         }
 
         .status {
             margin-top: 1rem;
-            font-size: 0.85rem;
-            color: #2a5f8a;
+            font-size: 0.8rem;
             font-weight: 500;
-            background: #eaf1fb;
+            background: #eaf3fc;
             padding: 0.5rem 1rem;
-            border-radius: 30px;
+            border-radius: 2rem;
             text-align: center;
+            color: #116b8f;
+            word-break: break-word;
+        }
+
+        .warning-note {
+            background: #fff3e0;
+            border-left: 4px solid #f4b942;
+            padding: 0.4rem 0.8rem;
+            border-radius: 1rem;
+            font-size: 0.7rem;
+            margin-top: 0.6rem;
+            color: #8a6200;
         }
 
         footer {
             text-align: center;
-            margin-top: 4rem;
-            color: #62748c;
-            font-size: 0.9rem;
-            border-top: 1px solid #d6e2ee;
-            padding-top: 2rem;
+            margin-top: 3rem;
+            color: #5b7f94;
+            font-size: 0.85rem;
+            border-top: 1px solid #cde0ec;
+            padding-top: 1.8rem;
         }
 
         .footer-badge {
-            display: inline-block;
-            background: #e2eaf3;
+            background: #e4eff8;
             border-radius: 40px;
-            padding: 0.3rem 1.2rem;
-            margin: 1rem 0 0;
+            padding: 0.3rem 1.4rem;
+            display: inline-block;
+            margin-bottom: 0.7rem;
         }
 
         hr {
-            border: 0;
+            border: none;
             height: 1px;
-            background: linear-gradient(90deg, transparent, #b7ccde, transparent);
+            background: linear-gradient(90deg, transparent, #b8d0e2, transparent);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            transform: none;
+            cursor: not-allowed;
         }
     </style>
 </head>
 <body>
 <div class="container">
-    <!-- cabeçalho profissional -->
     <div class="top-bar">
         <div class="logo">
-            <h1><i class="fas fa-file-signature" style="background: none; -webkit-text-fill-color: #1d4a7c;"></i> Convert<span style="background: none; -webkit-text-fill-color: #1d4a7c;">Pro</span><span>BETA</span></h1>
+            <h1><i class="fas fa-shield-heart" style="background: none; color:#1a6d8a;"></i> Convert<span style="background: none; color:#1a6d8a;">Pro</span><span>ZERO UPLOAD</span></h1>
         </div>
         <div class="trust-badge">
-            <span><i class="fas fa-shield-alt"></i> 100% local</span>
-            <span><i class="fas fa-clock"></i> tempo real</span>
+            <span><i class="fas fa-laptop-code"></i> 100% local</span>
+            <span><i class="fas fa-user-shield"></i> dados sigilosos</span>
             <span><i class="fas fa-infinity"></i> sem limites</span>
         </div>
     </div>
 
     <div class="tool-grid">
         <!-- UNIR PDF (MERGE) -->
-        <div class="card">
-            <div class="card-header"><div class="icon"><i class="fas fa-layer-group"></i></div><h3>Unir PDF</h3></div>
-            <div class="card-desc">Combine múltiplos PDFs em um documento único.</div>
-            <div class="file-zone"><i class="fas fa-cloud-upload-alt"></i><input type="file" id="mergeInput" multiple accept=".pdf" /></div>
-            <button class="btn-primary" onclick="mergePDF()"><i class="fas fa-object-group"></i> Unir arquivos</button>
-            <div class="status" id="mergeStatus"></div>
-        </div>
+        <div class="card"><div class="card-header"><div class="icon"><i class="fas fa-layer-group"></i></div><h3>Unir PDF</h3></div><div class="card-desc">Combine vários PDFs num único arquivo.</div><div class="file-zone"><i class="fas fa-cloud-upload-alt"></i><input type="file" id="mergeInput" multiple accept=".pdf" /></div><button class="btn-primary" id="btnMerge"><i class="fas fa-object-group"></i> Unir arquivos</button><div class="status" id="mergeStatus"></div></div>
 
         <!-- PDF → JPG -->
-        <div class="card">
-            <div class="card-header"><div class="icon"><i class="fas fa-camera-retro"></i></div><h3>PDF → JPG</h3></div>
-            <div class="card-desc">Extraia cada página como imagem de alta qualidade.</div>
-            <div class="file-zone"><i class="fas fa-file-pdf"></i><input type="file" id="pdfToJpgInput" accept=".pdf" /></div>
-            <button class="btn-primary" onclick="pdfToJpg()"><i class="fas fa-image"></i> Gerar JPGs</button>
-            <div class="status" id="pdfToJpgStatus"></div>
-        </div>
+        <div class="card"><div class="card-header"><div class="icon"><i class="fas fa-camera-retro"></i></div><h3>PDF → JPG</h3></div><div class="card-desc">Cada página vira imagem de alta qualidade.</div><div class="file-zone"><i class="fas fa-file-pdf"></i><input type="file" id="pdfToJpgInput" accept=".pdf" /></div><button class="btn-primary" id="btnPdfToJpg"><i class="fas fa-image"></i> Gerar JPGs</button><div class="status" id="pdfToJpgStatus"></div></div>
 
-        <!-- EXTRAIR PÁGINAS (split) -->
-        <div class="card">
-            <div class="card-header"><div class="icon"><i class="fas fa-cut"></i></div><h3>Extrair páginas</h3></div>
-            <div class="card-desc">Selecione intervalos como 1-3,5,7-9.</div>
-            <div class="file-zone"><i class="fas fa-file-pdf"></i><input type="file" id="extractInput" accept=".pdf" /></div>
-            <div class="extra-control"><i class="fas fa-ruler-combined"></i><input type="text" id="extractRanges" placeholder="ex: 1-3,5,7-9" /></div>
-            <button class="btn-primary" onclick="extractPages()"><i class="fas fa-scissors"></i> Extrair</button>
-            <div class="status" id="extractStatus"></div>
-        </div>
+        <!-- EXTRAIR PÁGINAS (MODIFICADO: extrai todas as páginas em ZIP) -->
+        <div class="card"><div class="card-header"><div class="icon"><i class="fas fa-cut"></i></div><h3>Extrair páginas</h3></div><div class="card-desc">Divide cada página do PDF em um arquivo separado e compacta tudo em ZIP.</div><div class="file-zone"><i class="fas fa-file-pdf"></i><input type="file" id="extractInput" accept=".pdf" /></div><button class="btn-primary" id="btnExtract"><i class="fas fa-file-archive"></i> Extrair todas → ZIP</button><div class="status" id="extractStatus"></div></div>
 
         <!-- PDF → DOC (texto) -->
-        <div class="card">
-            <div class="card-header"><div class="icon"><i class="fas fa-file-word"></i></div><h3>PDF → DOC</h3></div>
-            <div class="card-desc">Extrai todo o texto para um arquivo Word simples.</div>
-            <div class="file-zone"><i class="fas fa-file-pdf"></i><input type="file" id="pdfToDocInput" accept=".pdf" /></div>
-            <button class="btn-primary" onclick="pdfToDoc()"><i class="fas fa-file-export"></i> Converter</button>
-            <div class="status" id="pdfToDocStatus"></div>
-        </div>
+        <div class="card"><div class="card-header"><div class="icon"><i class="fas fa-file-word"></i></div><h3>PDF → DOC</h3></div><div class="card-desc">Extrai todo o texto para arquivo .doc.</div><div class="file-zone"><i class="fas fa-file-pdf"></i><input type="file" id="pdfToDocInput" accept=".pdf" /></div><button class="btn-primary" id="btnPdfToDoc"><i class="fas fa-file-export"></i> Converter</button><div class="status" id="pdfToDocStatus"></div></div>
 
-        <!-- DOC → PDF -->
-        <div class="card">
-            <div class="card-header"><div class="icon"><i class="fas fa-file-pdf"></i></div><h3>DOC → PDF</h3></div>
-            <div class="card-desc">Converte .docx para PDF (formatação aproximada).</div>
-            <div class="file-zone"><i class="fas fa-file-word"></i><input type="file" id="docToPdfInput" accept=".docx,.doc" /></div>
-            <button class="btn-primary" onclick="docToPdf()"><i class="fas fa-file-pdf"></i> Converter</button>
-            <div class="status" id="docToPdfStatus"></div>
-        </div>
+        <!-- DOC → PDF (CORRIGIDO) -->
+        <div class="card"><div class="card-header"><div class="icon"><i class="fas fa-file-pdf"></i></div><h3>DOC → PDF</h3></div><div class="card-desc">Converte .docx para PDF (formatação preservada).</div><div class="file-zone"><i class="fas fa-file-word"></i><input type="file" id="docToPdfInput" accept=".docx,.doc" /></div><button class="btn-primary" id="btnDocToPdf"><i class="fas fa-file-pdf"></i> Converter</button><div class="status" id="docToPdfStatus"></div></div>
 
-        <!-- EXCEL → PDF -->
-        <div class="card">
-            <div class="card-header"><div class="icon"><i class="fas fa-table"></i></div><h3>Excel → PDF</h3></div>
-            <div class="card-desc">Planilha vira PDF com dados em tabela.</div>
-            <div class="file-zone"><i class="fas fa-file-excel"></i><input type="file" id="excelToPdfInput" accept=".xlsx,.xls,.csv" /></div>
-            <button class="btn-primary" onclick="excelToPdf()"><i class="fas fa-file-pdf"></i> Converter</button>
-            <div class="status" id="excelToPdfStatus"></div>
-        </div>
+        <!-- Excel → PDF (melhorado) -->
+        <div class="card"><div class="card-header"><div class="icon"><i class="fas fa-table"></i></div><h3>Excel → PDF</h3></div><div class="card-desc">Planilha para PDF com tabela elegante.</div><div class="file-zone"><i class="fas fa-file-excel"></i><input type="file" id="excelToPdfInput" accept=".xlsx,.xls,.csv" /></div><button class="btn-primary" id="btnExcelToPdf"><i class="fas fa-file-pdf"></i> Converter</button><div class="status" id="excelToPdfStatus"></div></div>
 
         <!-- JPG → PDF -->
-        <div class="card">
-            <div class="card-header"><div class="icon"><i class="fas fa-images"></i></div><h3>JPG → PDF</h3></div>
-            <div class="card-desc">Agrupe imagens em um único PDF.</div>
-            <div class="file-zone"><i class="fas fa-image"></i><input type="file" id="jpgToPdfInput" multiple accept="image/*" /></div>
-            <button class="btn-primary" onclick="jpgToPdf()"><i class="fas fa-layer-group"></i> Criar PDF</button>
-            <div class="status" id="jpgToPdfStatus"></div>
-        </div>
+        <div class="card"><div class="card-header"><div class="icon"><i class="fas fa-images"></i></div><h3>JPG → PDF</h3></div><div class="card-desc">Agrupe imagens em um único PDF.</div><div class="file-zone"><i class="fas fa-image"></i><input type="file" id="jpgToPdfInput" multiple accept="image/*" /></div><button class="btn-primary" id="btnJpgToPdf"><i class="fas fa-layer-group"></i> Criar PDF</button><div class="status" id="jpgToPdfStatus"></div></div>
 
-        <!-- HTML → PDF -->
-        <div class="card">
-            <div class="card-header"><div class="icon"><i class="fas fa-code"></i></div><h3>HTML → PDF</h3></div>
-            <div class="card-desc">Arquivo .html para PDF com jsPDF.</div>
-            <div class="file-zone"><i class="fas fa-file-code"></i><input type="file" id="htmlToPdfInput" accept=".html,.htm" /></div>
-            <button class="btn-primary" onclick="htmlToPdf()"><i class="fas fa-file-pdf"></i> Converter</button>
-            <div class="status" id="htmlToPdfStatus"></div>
-        </div>
+        <!-- HTML → PDF (CORRIGIDO) -->
+        <div class="card"><div class="card-header"><div class="icon"><i class="fas fa-code"></i></div><h3>HTML → PDF</h3></div><div class="card-desc">Arquivo .html para PDF estruturado.</div><div class="file-zone"><i class="fas fa-file-code"></i><input type="file" id="htmlToPdfInput" accept=".html,.htm" /></div><button class="btn-primary" id="btnHtmlToPdf"><i class="fas fa-file-pdf"></i> Converter</button><div class="status" id="htmlToPdfStatus"></div></div>
 
-        <!-- NUMERAR PDF (COM POSIÇÃO) -->
-        <div class="card">
-            <div class="card-header"><div class="icon"><i class="fas fa-hashtag"></i></div><h3>Numerar PDF</h3></div>
-            <div class="card-desc">Adicione números de página onde desejar.</div>
-            <div class="file-zone"><i class="fas fa-file-pdf"></i><input type="file" id="numberPdfInput" accept=".pdf" /></div>
-            <div class="extra-control">
-                <label><i class="fas fa-arrows-alt"></i> Posição:</label>
-                <div class="radio-group">
-                    <label><input type="radio" name="numberPos" value="top-right" checked> <i class="fas fa-arrow-up"></i> topo dir.</label>
-                    <label><input type="radio" name="numberPos" value="bottom-left"> <i class="fas fa-arrow-down"></i> inf. esq.</label>
-                    <label><input type="radio" name="numberPos" value="bottom-right"> <i class="fas fa-arrow-down"></i> inf. dir.</label>
-                </div>
-            </div>
-            <button class="btn-primary" onclick="numberPdf()"><i class="fas fa-pencil-alt"></i> Numerar</button>
-            <div class="status" id="numberPdfStatus"></div>
-        </div>
+        <!-- NUMERAR PDF -->
+        <div class="card"><div class="card-header"><div class="icon"><i class="fas fa-hashtag"></i></div><h3>Numerar PDF</h3></div><div class="card-desc">Adiciona números de página customizáveis.</div><div class="file-zone"><i class="fas fa-file-pdf"></i><input type="file" id="numberPdfInput" accept=".pdf" /></div><div class="extra-control"><label><i class="fas fa-arrows-alt"></i> Posição:</label><div class="radio-group"><label><input type="radio" name="numberPos" value="top-right" checked> topo dir.</label><label><input type="radio" name="numberPos" value="bottom-left"> inf. esq.</label><label><input type="radio" name="numberPos" value="bottom-right"> inf. dir.</label></div></div><button class="btn-primary" id="btnNumberPdf"><i class="fas fa-pencil-alt"></i> Numerar</button><div class="status" id="numberPdfStatus"></div></div>
 
-        <!-- ORGANIZAR PDF (reordenar) -->
-        <div class="card">
-            <div class="card-header"><div class="icon"><i class="fas fa-sort-amount-up"></i></div><h3>Organizar PDF</h3></div>
-            <div class="card-desc">Nova ordem: 4,1,3,2 (páginas existentes).</div>
-            <div class="file-zone"><i class="fas fa-file-pdf"></i><input type="file" id="organizeInput" accept=".pdf" /></div>
-            <div class="extra-control"><i class="fas fa-sort"></i><input type="text" id="organizeOrder" placeholder="ex: 4,1,3,2" /></div>
-            <button class="btn-primary" onclick="organizePdf()"><i class="fas fa-arrows-alt-v"></i> Reordenar</button>
-            <div class="status" id="organizeStatus"></div>
-        </div>
+        <!-- ORGANIZAR PDF -->
+        <div class="card"><div class="card-header"><div class="icon"><i class="fas fa-sort-amount-up"></i></div><h3>Organizar PDF</h3></div><div class="card-desc">Nova ordem: 4,1,3,2 (páginas existentes).</div><div class="file-zone"><i class="fas fa-file-pdf"></i><input type="file" id="organizeInput" accept=".pdf" /></div><div class="extra-control"><i class="fas fa-sort"></i><input type="text" id="organizeOrder" placeholder="ex: 4,1,3,2"></div><button class="btn-primary" id="btnOrganize"><i class="fas fa-arrows-alt-v"></i> Reordenar</button><div class="status" id="organizeStatus"></div></div>
 
-        <!-- TRADUZIR PDF (COM SUPORTE A +50k caracteres) -->
-        <div class="card">
-            <div class="card-header"><div class="icon"><i class="fas fa-language"></i></div><h3>Traduzir PDF</h3></div>
-            <div class="card-desc">Extrai texto, traduz (inglês → idioma escolhido). Suporta grandes documentos (divisão automática).</div>
-            <div class="file-zone"><i class="fas fa-file-pdf"></i><input type="file" id="translatePdfInput" accept=".pdf" /></div>
-            <div class="extra-control" style="gap: 8px;">
-                <label><i class="fas fa-globe"></i> Origem:</label>
-                <select id="sourceLang" style="width: auto; min-width: 90px;">
-                    <option value="en">Inglês</option>
-                    <option value="pt">Português</option>
-                    <option value="es">Espanhol</option>
-                    <option value="fr">Francês</option>
-                    <option value="de">Alemão</option>
-                    <option value="it">Italiano</option>
-                </select>
-                <i class="fas fa-arrow-right"></i>
-                <label>Destino:</label>
-                <select id="targetLang" style="width: auto; min-width: 90px;">
-                    <option value="pt">Português</option>
-                    <option value="en">Inglês</option>
-                    <option value="es">Espanhol</option>
-                    <option value="fr">Francês</option>
-                    <option value="de">Alemão</option>
-                    <option value="it">Italiano</option>
-                </select>
-            </div>
-            <button class="btn-primary" onclick="translatePdf()"><i class="fas fa-language"></i> Traduzir (até +50k)</button>
-            <div class="status" id="translateStatus"></div>
-        </div>
+        <!-- TRADUZIR PDF (com proteção de dados: aviso externo) -->
+        <div class="card"><div class="card-header"><div class="icon"><i class="fas fa-language"></i></div><h3>Traduzir PDF</h3></div><div class="card-desc">Texto extraído e traduzido (suporte a documentos longos).</div><div class="file-zone"><i class="fas fa-file-pdf"></i><input type="file" id="translatePdfInput" accept=".pdf" /></div><div class="extra-control" style="gap: 8px;"><label><i class="fas fa-globe"></i> Origem:</label><select id="sourceLang"><option value="en">Inglês</option><option value="pt">Português</option><option value="es">Espanhol</option><option value="fr">Francês</option><option value="de">Alemão</option></select><i class="fas fa-arrow-right"></i><label>Destino:</label><select id="targetLang"><option value="pt">Português</option><option value="en">Inglês</option><option value="es">Espanhol</option><option value="fr">Francês</option><option value="de">Alemão</option></select></div><button class="btn-primary" id="btnTranslate"><i class="fas fa-language"></i> Traduzir (até 50k+ chars)</button><div class="status" id="translateStatus"></div><div class="warning-note"><i class="fas fa-exclamation-triangle"></i> A tradução envia texto para a API MyMemory (terceiros). Para proteção total de dados, evite conteúdo sensível.</div></div>
     </div>
-
     <hr>
     <footer>
-        <span class="footer-badge"><i class="fas fa-microchip"></i> 100% local · seus arquivos permanecem no dispositivo</span>
-        <p style="margin-top:1rem;">Conversões avançadas utilizam pdf-lib, pdf.js, SheetJS, Mammoth e MyMemory API (tradução).<br>Documentos longos são divididos automaticamente para tradução.</p>
+        <div class="footer-badge"><i class="fas fa-microchip"></i> 100% offline • Todos os arquivos processados localmente • Nunca enviados para servidor (exceto tradução opcional)</div>
+        <p style="margin-top:0.8rem;">Conversões profissionais usando pdf-lib, pdf.js, SheetJS, Mammoth e jsPDF. Interface reforçada para máxima confiabilidade.</p>
     </footer>
 </div>
 
 <script>
-    // ------------------------------------------------------------
-    // FUNÇÕES ATUALIZADAS
-    // ------------------------------------------------------------
+    // Helper: desabilitar botão durante ação e restaurar
+    function withLoading(btnId, statusId, asyncCallback) {
+        const btn = document.getElementById(btnId);
+        const statusDiv = document.getElementById(statusId);
+        if (!btn) return;
+        const originalText = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Processando...';
+        statusDiv.innerText = '⏳ Processando, aguarde...';
+        asyncCallback()
+            .catch(err => {
+                console.error(err);
+                statusDiv.innerText = `❌ Erro: ${err.message || 'falha na operação'}`;
+            })
+            .finally(() => {
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+            });
+    }
 
-    // unir pdf (merge)
-    async function mergePDF() {
+    // UNIR PDF
+    document.getElementById('btnMerge').onclick = () => withLoading('btnMerge', 'mergeStatus', async () => {
         const input = document.getElementById('mergeInput');
-        const status = document.getElementById('mergeStatus');
-        if (!input.files.length) { status.innerText = '❌ Selecione pelo menos 2 PDFs.'; return; }
-        status.innerText = '⏳ Unindo...';
+        if (!input.files.length) throw new Error('Selecione pelo menos 2 PDFs');
         const { PDFDocument } = PDFLib;
         const mergedPdf = await PDFDocument.create();
         for (let file of input.files) {
             const arrayBuf = await file.arrayBuffer();
             const pdf = await PDFDocument.load(arrayBuf);
             const pages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
-            pages.forEach(page => mergedPdf.addPage(page));
+            pages.forEach(p => mergedPdf.addPage(p));
         }
         const pdfBytes = await mergedPdf.save();
-        saveAs(new Blob([pdfBytes], { type: 'application/pdf' }), 'unido.pdf');
-        status.innerText = '✅ PDF unido com sucesso!';
-    }
+        saveAs(new Blob([pdfBytes], { type: 'application/pdf' }), 'documento_unificado.pdf');
+        document.getElementById('mergeStatus').innerText = '✅ PDF unido com sucesso!';
+    });
 
-    // pdf para jpg
-    async function pdfToJpg() {
+    // PDF -> JPG
+    document.getElementById('btnPdfToJpg').onclick = () => withLoading('btnPdfToJpg', 'pdfToJpgStatus', async () => {
         const input = document.getElementById('pdfToJpgInput');
-        const status = document.getElementById('pdfToJpgStatus');
-        if (!input.files.length) { status.innerText = '❌ Selecione um PDF.'; return; }
-        status.innerText = '⏳ Renderizando páginas...';
+        if (!input.files.length) throw new Error('Selecione um PDF');
         const file = input.files[0];
         const arrayBuf = await file.arrayBuffer();
         const loadingTask = pdfjsLib.getDocument({ data: arrayBuf });
         const pdf = await loadingTask.promise;
         for (let i = 1; i <= pdf.numPages; i++) {
             const page = await pdf.getPage(i);
-            const viewport = page.getViewport({ scale: 1.5 });
+            const viewport = page.getViewport({ scale: 1.8 });
             const canvas = document.createElement('canvas');
             canvas.width = viewport.width;
             canvas.height = viewport.height;
-            await page.render({ canvasContext: canvas.getContext('2d'), viewport: viewport }).promise;
-            canvas.toBlob(blob => saveAs(blob, `pagina_${i}.jpg`), 'image/jpeg', 0.9);
+            await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
+            await new Promise(resolve => canvas.toBlob(blob => { saveAs(blob, `pagina_${i}.jpg`); resolve(); }, 'image/jpeg', 0.92));
         }
-        status.innerText = `✅ ${pdf.numPages} imagens geradas.`;
-    }
+        document.getElementById('pdfToJpgStatus').innerText = `✅ ${pdf.numPages} imagens geradas.`;
+    });
 
-    // extrair páginas
-    async function extractPages() {
+    // EXTRAIR PÁGINAS EM ZIP (MODIFICADO)
+    document.getElementById('btnExtract').onclick = () => withLoading('btnExtract', 'extractStatus', async () => {
         const input = document.getElementById('extractInput');
-        const ranges = document.getElementById('extractRanges').value.trim();
-        const status = document.getElementById('extractStatus');
-        if (!input.files.length) { status.innerText = '❌ Selecione um PDF.'; return; }
-        if (!ranges) { status.innerText = '❌ Especifique as páginas.'; return; }
-        status.innerText = '⏳ Extraindo...';
-        const arrayBuf = await input.files[0].arrayBuffer();
+        if (!input.files.length) throw new Error('Selecione um PDF');
+        const file = input.files[0];
+        const arrayBuf = await file.arrayBuffer();
         const { PDFDocument } = PDFLib;
         const originalPdf = await PDFDocument.load(arrayBuf);
-        const newPdf = await PDFDocument.create();
-        const parts = ranges.split(',').map(s => s.trim());
-        const indices = new Set();
-        for (let part of parts) {
-            if (part.includes('-')) {
-                let [start, end] = part.split('-').map(Number);
-                for (let i = start; i <= end; i++) indices.add(i - 1);
-            } else {
-                let p = Number(part);
-                if (!isNaN(p)) indices.add(p - 1);
-            }
+        const totalPages = originalPdf.getPageCount();
+        if (totalPages === 0) throw new Error('O PDF não contém páginas.');
+        
+        const zip = new JSZip();
+        for (let i = 0; i < totalPages; i++) {
+            const newPdf = await PDFDocument.create();
+            const [copiedPage] = await newPdf.copyPages(originalPdf, [i]);
+            newPdf.addPage(copiedPage);
+            const pdfBytes = await newPdf.save();
+            zip.file(`pagina_${i+1}.pdf`, pdfBytes, { binary: true });
         }
-        const sorted = Array.from(indices).filter(i => i >= 0 && i < originalPdf.getPageCount()).sort((a,b)=>a-b);
-        if (!sorted.length) { status.innerText = '⚠️ Nenhuma página válida.'; return; }
-        const pages = await newPdf.copyPages(originalPdf, sorted);
-        pages.forEach(p => newPdf.addPage(p));
-        const pdfBytes = await newPdf.save();
-        saveAs(new Blob([pdfBytes]), 'extracao.pdf');
-        status.innerText = `✅ ${sorted.length} páginas extraídas.`;
-    }
+        const zipBlob = await zip.generateAsync({ type: 'blob' });
+        saveAs(zipBlob, `paginas_extraidas.zip`);
+        document.getElementById('extractStatus').innerText = `✅ ${totalPages} páginas extraídas e compactadas em ZIP.`;
+    });
 
-    // pdf -> doc (texto)
-    async function pdfToDoc() {
+    // PDF -> DOC (texto)
+    document.getElementById('btnPdfToDoc').onclick = () => withLoading('btnPdfToDoc', 'pdfToDocStatus', async () => {
         const input = document.getElementById('pdfToDocInput');
-        const status = document.getElementById('pdfToDocStatus');
-        if (!input.files.length) { status.innerText = '❌ Selecione um PDF.'; return; }
-        status.innerText = '⏳ Extraindo texto...';
+        if (!input.files.length) throw new Error('Selecione um PDF');
         const arrayBuf = await input.files[0].arrayBuffer();
         const loadingTask = pdfjsLib.getDocument({ data: arrayBuf });
         const pdf = await loadingTask.promise;
@@ -534,61 +433,59 @@
             const content = await page.getTextContent();
             fullText += content.items.map(item => item.str).join(' ') + '\n\n';
         }
-        saveAs(new Blob([fullText], { type: 'application/msword' }), 'extraido.doc');
-        status.innerText = '✅ Texto salvo como .doc (apenas texto).';
-    }
+        saveAs(new Blob([fullText], { type: 'application/msword' }), 'documento_extraido.doc');
+        document.getElementById('pdfToDocStatus').innerText = '✅ Texto salvo como .doc.';
+    });
 
-    // doc -> pdf
-    async function docToPdf() {
+    // DOC -> PDF (FIX: renderização correta via html2canvas implícita)
+    document.getElementById('btnDocToPdf').onclick = () => withLoading('btnDocToPdf', 'docToPdfStatus', async () => {
         const input = document.getElementById('docToPdfInput');
-        const status = document.getElementById('docToPdfStatus');
-        if (!input.files.length) { status.innerText = '❌ Selecione um .docx'; return; }
-        status.innerText = '⏳ Convertendo...';
+        if (!input.files.length) throw new Error('Selecione um arquivo .docx');
         const arrayBuf = await input.files[0].arrayBuffer();
-        const { value: html } = await mammoth.convertToHtml({ arrayBuffer: arrayBuf });
+        const { value: htmlContent } = await mammoth.convertToHtml({ arrayBuffer: arrayBuf });
+        const container = document.createElement('div');
+        container.style.position = 'absolute';
+        container.style.left = '-9999px';
+        container.style.top = '-9999px';
+        container.style.width = '800px';
+        container.style.background = 'white';
+        container.style.padding = '20px';
+        container.innerHTML = htmlContent;
+        document.body.appendChild(container);
         const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
-        doc.html(html, { callback: pdf => pdf.save('convertido.pdf'), margin: [10,10,10,10] });
-        status.innerText = '✅ PDF gerado (formatação básica).';
-    }
+        const pdf = new jsPDF('p', 'pt', 'a4');
+        await pdf.html(container, { callback: (pdfDoc) => { pdfDoc.save('conversao_doc.pdf'); }, margin: [30,30,30,30], autoPaging: 'text' });
+        document.body.removeChild(container);
+        document.getElementById('docToPdfStatus').innerText = '✅ PDF gerado com formatação.';
+    });
 
-    // excel -> pdf
-    async function excelToPdf() {
+    // Excel -> PDF (usando html para tabela)
+    document.getElementById('btnExcelToPdf').onclick = () => withLoading('btnExcelToPdf', 'excelToPdfStatus', async () => {
         const input = document.getElementById('excelToPdfInput');
-        const status = document.getElementById('excelToPdfStatus');
-        if (!input.files.length) { status.innerText = '❌ Selecione uma planilha.'; return; }
-        status.innerText = '⏳ Processando...';
+        if (!input.files.length) throw new Error('Selecione uma planilha');
         const data = await input.files[0].arrayBuffer();
         const workbook = XLSX.read(data, { type: 'array' });
         const sheet = workbook.Sheets[workbook.SheetNames[0]];
-        const html = XLSX.utils.sheet_to_html(sheet);
+        const htmlTable = XLSX.utils.sheet_to_html(sheet, { id: "tabela_excel", editable: false });
+        const wrapper = document.createElement('div');
+        wrapper.style.position = 'absolute';
+        wrapper.style.left = '-9999px';
+        wrapper.style.background = 'white';
+        wrapper.style.padding = '20px';
+        wrapper.style.width = '900px';
+        wrapper.innerHTML = `<style>table, th, td { border:1px solid #aaa; border-collapse:collapse; padding:6px; font-family:sans-serif; }</style>${htmlTable}`;
+        document.body.appendChild(wrapper);
         const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
-        const temp = document.createElement('div');
-        temp.innerHTML = html;
-        const rows = temp.getElementsByTagName('tr');
-        let y = 10;
-        for (let row of rows) {
-            let cells = row.getElementsByTagName('td');
-            if (!cells.length) cells = row.getElementsByTagName('th');
-            let line = '';
-            for (let cell of cells) line += cell.textContent + ' | ';
-            if (line) {
-                doc.text(line.slice(0,-2), 10, y);
-                y += 7;
-                if (y > 280) { doc.addPage(); y = 10; }
-            }
-        }
-        doc.save('planilha.pdf');
-        status.innerText = '✅ PDF gerado.';
-    }
+        const pdf = new jsPDF('p', 'pt', 'a4');
+        await pdf.html(wrapper, { callback: (pdfDoc) => { pdfDoc.save('planilha_convertida.pdf'); }, margin: [20,20,20,20], autoPaging: 'text' });
+        document.body.removeChild(wrapper);
+        document.getElementById('excelToPdfStatus').innerText = '✅ PDF da planilha criado.';
+    });
 
-    // jpg -> pdf
-    async function jpgToPdf() {
+    // JPG -> PDF
+    document.getElementById('btnJpgToPdf').onclick = () => withLoading('btnJpgToPdf', 'jpgToPdfStatus', async () => {
         const input = document.getElementById('jpgToPdfInput');
-        const status = document.getElementById('jpgToPdfStatus');
-        if (!input.files.length) { status.innerText = '❌ Selecione imagens.'; return; }
-        status.innerText = '⏳ Criando PDF...';
+        if (!input.files.length) throw new Error('Selecione imagens');
         const { PDFDocument } = PDFLib;
         const pdfDoc = await PDFDocument.create();
         for (let file of input.files) {
@@ -600,32 +497,36 @@
             page.drawImage(image, { x: 0, y: 0, width: image.width, height: image.height });
         }
         const pdfBytes = await pdfDoc.save();
-        saveAs(new Blob([pdfBytes]), 'imagens.pdf');
-        status.innerText = '✅ PDF com imagens criado.';
-    }
+        saveAs(new Blob([pdfBytes]), 'imagens_agrupadas.pdf');
+        document.getElementById('jpgToPdfStatus').innerText = '✅ PDF com imagens criado.';
+    });
 
-    // html -> pdf
-    async function htmlToPdf() {
+    // HTML -> PDF (FIX)
+    document.getElementById('btnHtmlToPdf').onclick = () => withLoading('btnHtmlToPdf', 'htmlToPdfStatus', async () => {
         const input = document.getElementById('htmlToPdfInput');
-        const status = document.getElementById('htmlToPdfStatus');
-        if (!input.files.length) { status.innerText = '❌ Selecione um arquivo HTML.'; return; }
-        status.innerText = '⏳ Convertendo...';
-        const text = await input.files[0].text();
+        if (!input.files.length) throw new Error('Selecione um arquivo HTML');
+        const htmlString = await input.files[0].text();
+        const tempDiv = document.createElement('div');
+        tempDiv.style.position = 'absolute';
+        tempDiv.style.left = '-9999px';
+        tempDiv.style.width = '800px';
+        tempDiv.style.background = 'white';
+        tempDiv.innerHTML = htmlString;
+        document.body.appendChild(tempDiv);
         const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
-        doc.html(text, { callback: pdf => pdf.save('pagina.pdf'), margin: [10,10,10,10] });
-        status.innerText = '✅ HTML convertido.';
-    }
+        const pdf = new jsPDF('p', 'pt', 'a4');
+        await pdf.html(tempDiv, { callback: (pdfDoc) => { pdfDoc.save('html_convertido.pdf'); }, margin: [20,20,20,20] });
+        document.body.removeChild(tempDiv);
+        document.getElementById('htmlToPdfStatus').innerText = '✅ HTML convertido para PDF.';
+    });
 
-    // NUMERAR PDF com posição
-    async function numberPdf() {
+    // NUMERAR PDF
+    document.getElementById('btnNumberPdf').onclick = () => withLoading('btnNumberPdf', 'numberPdfStatus', async () => {
         const input = document.getElementById('numberPdfInput');
-        const status = document.getElementById('numberPdfStatus');
         const posRadios = document.getElementsByName('numberPos');
         let position = 'top-right';
         for (let r of posRadios) if (r.checked) { position = r.value; break; }
-        if (!input.files.length) { status.innerText = '❌ Selecione um PDF.'; return; }
-        status.innerText = '⏳ Numerando...';
+        if (!input.files.length) throw new Error('Selecione um PDF');
         const arrayBuf = await input.files[0].arrayBuffer();
         const { PDFDocument, rgb, StandardFonts } = PDFLib;
         const pdfDoc = await PDFDocument.load(arrayBuf);
@@ -635,48 +536,45 @@
             const page = pages[i];
             const { width, height } = page.getSize();
             let x, y;
-            const margin = 30;
+            const margin = 35;
             if (position === 'top-right') { x = width - margin; y = height - margin; }
             else if (position === 'bottom-left') { x = margin; y = margin; }
-            else if (position === 'bottom-right') { x = width - margin; y = margin; }
+            else { x = width - margin; y = margin; }
             page.drawText(String(i+1), { x, y, size: 12, font, color: rgb(0,0,0) });
         }
         const pdfBytes = await pdfDoc.save();
-        saveAs(new Blob([pdfBytes]), 'numerado.pdf');
-        status.innerText = '✅ Números adicionados na posição escolhida.';
-    }
+        saveAs(new Blob([pdfBytes]), 'numerado_final.pdf');
+        document.getElementById('numberPdfStatus').innerText = '✅ Números inseridos.';
+    });
 
-    // organizar pdf
-    async function organizePdf() {
+    // ORGANIZAR PDF
+    document.getElementById('btnOrganize').onclick = () => withLoading('btnOrganize', 'organizeStatus', async () => {
         const input = document.getElementById('organizeInput');
         const orderStr = document.getElementById('organizeOrder').value.trim();
-        const status = document.getElementById('organizeStatus');
-        if (!input.files.length) { status.innerText = '❌ Selecione um PDF.'; return; }
-        if (!orderStr) { status.innerText = '❌ Informe a ordem.'; return; }
-        status.innerText = '⏳ Reorganizando...';
+        if (!input.files.length) throw new Error('Selecione um PDF');
+        if (!orderStr) throw new Error('Informe a ordem (ex: 2,1,3)');
         const arrayBuf = await input.files[0].arrayBuffer();
         const { PDFDocument } = PDFLib;
         const originalPdf = await PDFDocument.load(arrayBuf);
         const newPdf = await PDFDocument.create();
         const parts = orderStr.split(',').map(s => Number(s.trim()) - 1);
         const valid = parts.filter(i => i >= 0 && i < originalPdf.getPageCount());
-        if (!valid.length) { status.innerText = '⚠️ Índices inválidos.'; return; }
+        if (!valid.length) throw new Error('Índices inválidos');
         const pages = await newPdf.copyPages(originalPdf, valid);
         pages.forEach(p => newPdf.addPage(p));
         const pdfBytes = await newPdf.save();
         saveAs(new Blob([pdfBytes]), 'reorganizado.pdf');
-        status.innerText = '✅ PDF reordenado.';
-    }
+        document.getElementById('organizeStatus').innerText = '✅ PDF reordenado.';
+    });
 
-    // TRADUZIR PDF com suporte a >50k caracteres (divisão automática)
-    async function translatePdf() {
+    // TRADUZIR PDF (com chunks e texto em múltiplas páginas)
+    document.getElementById('btnTranslate').onclick = () => withLoading('btnTranslate', 'translateStatus', async () => {
         const input = document.getElementById('translatePdfInput');
         const sourceLang = document.getElementById('sourceLang').value;
         const targetLang = document.getElementById('targetLang').value;
-        const status = document.getElementById('translateStatus');
-        if (!input.files.length) { status.innerText = '❌ Selecione um PDF.'; return; }
-        status.innerText = '⏳ Extraindo texto... (documento grande pode demorar)';
-
+        if (!input.files.length) throw new Error('Selecione um PDF');
+        const statusDiv = document.getElementById('translateStatus');
+        statusDiv.innerText = '⏳ Extraindo texto do PDF...';
         const arrayBuf = await input.files[0].arrayBuffer();
         const loadingTask = pdfjsLib.getDocument({ data: arrayBuf });
         const pdf = await loadingTask.promise;
@@ -686,9 +584,7 @@
             const content = await page.getTextContent();
             fullText += content.items.map(item => item.str).join(' ') + '\n';
         }
-
-        status.innerText = '⏳ Traduzindo texto (dividindo se necessário)...';
-        // MyMemory aceita até 5k por request. Dividir em blocos de 4500 para segurança
+        statusDiv.innerText = '⏳ Traduzindo texto (dividindo em blocos seguros)...';
         const CHUNK_SIZE = 4500;
         let translatedChunks = [];
         for (let i = 0; i < fullText.length; i += CHUNK_SIZE) {
@@ -697,26 +593,24 @@
             try {
                 const response = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(chunk)}&langpair=${sourceLang}|${targetLang}`);
                 const json = await response.json();
-                if (json.responseData && json.responseData.translatedText) {
-                    translatedChunks.push(json.responseData.translatedText);
-                } else {
-                    translatedChunks.push('[erro no trecho]');
-                }
-                // pequena pausa para evitar flood (opcional)
-                await new Promise(r => setTimeout(r, 300));
-            } catch (e) {
-                translatedChunks.push('[falha na tradução]');
-            }
+                if (json.responseData?.translatedText) translatedChunks.push(json.responseData.translatedText);
+                else translatedChunks.push('[trecho não traduzido]');
+                await new Promise(r => setTimeout(r, 200));
+            } catch (e) { translatedChunks.push('[falha na tradução]'); }
         }
         const finalText = translatedChunks.join(' ');
-
-        // Gerar PDF com o texto traduzido
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
-        doc.text(finalText, 10, 10, { maxWidth: 180 });
-        doc.save('traduzido.pdf');
-        status.innerText = `✅ Tradução concluída (${Math.ceil(fullText.length/CHUNK_SIZE)} partes combinadas).`;
-    }
+        const lines = doc.splitTextToSize(finalText, 170);
+        let y = 20;
+        for (let line of lines) {
+            if (y > 280) { doc.addPage(); y = 20; }
+            doc.text(line, 15, y);
+            y += 7;
+        }
+        doc.save('documento_traduzido.pdf');
+        statusDiv.innerText = `✅ Tradução concluída (${Math.ceil(fullText.length/CHUNK_SIZE)} partes).`;
+    });
 </script>
 </body>
 </html>

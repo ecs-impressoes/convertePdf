@@ -1,40 +1,88 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
+    
 <head>
+     <link rel="stylesheet" href="estilo.css">
+    <style>
+  /* Container do cabeçalho */
+.header-content {
+  display: flex;
+  align-items: center;       /* alinha verticalmente */
+  justify-content: space-between; /* ou flex-start se quiser só a logo à esquerda */
+  padding: 1rem 2rem;
+  background-color: #f5f5f5; /* exemplo */
+}
+
+/* Link da logo */
+.logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  gap: 0.75rem;             /* espaçamento entre imagem e texto */
+}
+
+/* Imagem da logo */
+.logo-img {
+  height: 200px;             /* medida ideal para altura da imagem */
+  width: 200px;              /* mantém proporção */
+  max-height: 300%;         /* evita estourar o contêiner */
+}
+
+/* Texto da logo */
+.logo-text span {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+  line-height: 1.2;
+}
+</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ConvertPro · estúdio de documentos local</title>
-    <!-- Font Awesome 6 -->
+     <div class="container header-content">
+  <a href="#" class="logo">
+    <img src="conversor_de_arqui.logo.png" alt="Conversor de Arquivos sem Limites" class="logo-img">
+    <div class="logo-text">
+      <h1>Converta seus arquivos sem armazenar em servidores</h1>
+    </div>
+  </a>
+  <!-- outros elementos do cabeçalho, se houver -->
+</div>
+       <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Bibliotecas -->
+    <!-- Bibliotecas robustas -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mammoth@1.4.19/mammoth.browser.min.js"></script>
     <script src="https://cdn.sheetjs.com/xlsx-0.19.2/package/dist/xlsx.full.min.js"></script>
+    <!-- pdf.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <!-- html2canvas para conversão DOC → PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script>
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
     </script>
     <style>
-        /* (estilos inalterados) */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
+
         body {
             background: #f8fafc;
             padding: 2rem 1.5rem;
             color: #0b1e33;
         }
+
         .container {
             max-width: 1440px;
             margin: 0 auto;
         }
+
+        /* cabeçalho refinado */
         .top-bar {
             display: flex;
             align-items: center;
@@ -43,6 +91,7 @@
             flex-wrap: wrap;
             gap: 1rem;
         }
+
         .logo h1 {
             font-weight: 600;
             font-size: 2rem;
@@ -51,6 +100,7 @@
             -webkit-text-fill-color: transparent;
             letter-spacing: -0.5px;
         }
+
         .logo span {
             background: #0a2942;
             color: white;
@@ -61,21 +111,26 @@
             font-weight: 500;
             -webkit-text-fill-color: white;
         }
+
         .trust-badge {
             display: flex;
             gap: 1.8rem;
             color: #3e5e7e;
         }
+
         .trust-badge i {
             margin-right: 6px;
             color: #1d4a7c;
         }
+
+        /* grid de cards */
         .tool-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
             gap: 2rem;
             margin: 2.5rem 0;
         }
+
         .card {
             background: #ffffff;
             border-radius: 32px;
@@ -87,16 +142,19 @@
             border: 1px solid rgba(255,255,255,0.5);
             backdrop-filter: blur(2px);
         }
+
         .card:hover {
             transform: translateY(-4px);
             box-shadow: 0 28px 40px -12px rgba(0,35,70,0.25);
         }
+
         .card-header {
             display: flex;
             align-items: center;
             gap: 12px;
             margin-bottom: 1rem;
         }
+
         .card-header .icon {
             background: #edf2f9;
             width: 50px;
@@ -109,11 +167,13 @@
             font-size: 1.8rem;
             box-shadow: inset 0 1px 3px rgba(255,255,255,0.7), 0 4px 6px rgba(0,0,0,0.02);
         }
+
         .card-header h3 {
             font-size: 1.4rem;
             font-weight: 600;
             color: #0b1e33;
         }
+
         .card-desc {
             color: #486581;
             font-size: 0.95rem;
@@ -121,6 +181,7 @@
             margin-bottom: 1.8rem;
             padding-left: 0.2rem;
         }
+
         .file-zone {
             background: #f1f5f9;
             border-radius: 24px;
@@ -131,11 +192,13 @@
             align-items: center;
             transition: 0.2s;
         }
+
         .file-zone i {
             color: #6783a0;
             font-size: 1.2rem;
             margin-right: 10px;
         }
+
         .file-zone input[type="file"] {
             flex: 1;
             border: none;
@@ -144,6 +207,7 @@
             color: #1e3a5f;
             padding: 0.6rem 0;
         }
+
         .file-zone input[type="file"]::file-selector-button {
             background: white;
             border: 1px solid #bdd3e8;
@@ -156,10 +220,12 @@
             transition: 0.15s;
             margin-right: 1rem;
         }
+
         .file-zone input[type="file"]::file-selector-button:hover {
             background: #e6effa;
             border-color: #1d4a7c;
         }
+
         .extra-control {
             background: #f1f5f9;
             border-radius: 20px;
@@ -171,6 +237,7 @@
             gap: 10px;
             flex-wrap: wrap;
         }
+
         .extra-control input, .extra-control select {
             background: white;
             border: 1px solid #cbd6e4;
@@ -180,6 +247,7 @@
             color: #0b1e33;
             flex: 1 1 auto;
         }
+
         .extra-control label {
             font-size: 0.9rem;
             font-weight: 500;
@@ -188,6 +256,7 @@
             align-items: center;
             gap: 6px;
         }
+
         .radio-group {
             display: flex;
             gap: 1rem;
@@ -197,10 +266,12 @@
             border-radius: 40px;
             border: 1px solid #cbd6e4;
         }
+
         .radio-group label {
             font-weight: 400;
             color: #2d4c73;
         }
+
         .btn-primary {
             background: #0b1e33;
             color: white;
@@ -218,13 +289,16 @@
             margin-top: auto;
             box-shadow: 0 8px 16px -6px rgba(10, 40, 70, 0.3);
         }
+
         .btn-primary:hover {
             background: #123456;
             transform: scale(1.02);
         }
+
         .btn-primary i {
             font-size: 1.2rem;
         }
+
         .status {
             margin-top: 1rem;
             font-size: 0.85rem;
@@ -235,6 +309,7 @@
             border-radius: 30px;
             text-align: center;
         }
+
         footer {
             text-align: center;
             margin-top: 4rem;
@@ -243,6 +318,7 @@
             border-top: 1px solid #d6e2ee;
             padding-top: 2rem;
         }
+
         .footer-badge {
             display: inline-block;
             background: #e2eaf3;
@@ -250,6 +326,7 @@
             padding: 0.3rem 1.2rem;
             margin: 1rem 0 0;
         }
+
         hr {
             border: 0;
             height: 1px;

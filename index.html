@@ -1,14 +1,38 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-     @media (max-width: 768px) {
-  .logo-img {
-    height: 36px;
-  }
-  .logo-text span {
-    font-size: 1rem;
-  }
-}
+    
 <head>
+     /* Container do cabeçalho */
+.header-content {
+  display: flex;
+  align-items: center;       /* alinha verticalmente */
+  justify-content: space-between; /* ou flex-start se quiser só a logo à esquerda */
+  padding: 1rem 2rem;
+  background-color: #f5f5f5; /* exemplo */
+}
+
+/* Link da logo */
+.logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  gap: 0.75rem;             /* espaçamento entre imagem e texto */
+}
+
+/* Imagem da logo */
+.logo-img {
+  height: 48px;             /* medida ideal para altura da imagem */
+  width: auto;              /* mantém proporção */
+  max-height: 100%;         /* evita estourar o contêiner */
+}
+
+/* Texto da logo */
+.logo-text span {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+  line-height: 1.2;
+}
    <div class="container header-content">
   <a href="#" class="logo">
     <img src="conversor_de_arqui.logo.png" alt="Conversor de Arquivos sem Limites" class="logo-img">

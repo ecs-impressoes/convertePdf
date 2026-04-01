@@ -433,7 +433,7 @@ document.getElementById('btnPdfToDoc').onclick = () => withLoading('btnPdfToDoc'
         const content = await page.getTextContent();
         fullText += content.items.map(item => item.str).join(' ') + '\n\n';
     }
-    // Cria documento HTML com margens ABNT
+
     const formattedHtml = `<!DOCTYPE html>
     <html>
     <head>
@@ -455,25 +455,13 @@ document.getElementById('btnPdfToDoc').onclick = () => withLoading('btnPdfToDoc'
     document.getElementById('pdfToDocStatus').innerText = '✅ DOC gerado com margens ABNT e fonte Arial MT 16.';
 });
 
-// Função auxiliar para escapar caracteres HTML
+// Função auxiliar para escapar caracteres HTML (versão simplificada e segura)
 function escapeHtml(str) {
     return str.replace(/[&<>]/g, function(m) {
         if (m === '&') return '&amp;';
         if (m === '<') return '&lt;';
         if (m === '>') return '&gt;';
         return m;
-    });
-}
-
-// Função auxiliar para escapar caracteres HTML
-function escapeHtml(str) {
-    return str.replace(/[&<>]/g, function(m) {
-        if (m === '&') return '&amp;';
-        if (m === '<') return '&lt;';
-        if (m === '>') return '&gt;';
-        return m;
-    }).replace(/[\u00A0-\u9999<>\&]/g, function(i) {
-        return i;
     });
 }
     // DOC -> PDF (FIX: renderização correta via html2canvas implícita)

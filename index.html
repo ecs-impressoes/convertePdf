@@ -420,7 +420,7 @@
         document.getElementById('extractStatus').innerText = `✅ ${totalPages} páginas extraídas e compactadas em ZIP.`;
     });
 
-    // PDF -> DOC (com formatação Arial MT, tamanho 16)
+    // PDF -> DOC (com formatação Arial MT, tamanho 16 e margens ABNT)
 document.getElementById('btnPdfToDoc').onclick = () => withLoading('btnPdfToDoc', 'pdfToDocStatus', async () => {
     const input = document.getElementById('pdfToDocInput');
     if (!input.files.length) throw new Error('Selecione um PDF');
@@ -431,9 +431,9 @@ document.getElementById('btnPdfToDoc').onclick = () => withLoading('btnPdfToDoc'
     for (let i = 1; i <= pdf.numPages; i++) {
         const page = await pdf.getPage(i);
         const content = await page.getTextContent();
-        fullText += content.items.map(item => item.str).join(' ') + '\n\n'; // duas quebras separam páginas
+        fullText += content.items.map(item => item.str).join(' ') + '\n\n';
     }
-    // Cria documento HTML formatado para ser aberto como .doc
+    // Cria documento HTML com margens ABNT
     const formattedHtml = `<!DOCTYPE html>
     <html>
     <head>
@@ -443,7 +443,7 @@ document.getElementById('btnPdfToDoc').onclick = () => withLoading('btnPdfToDoc'
                 font-family: 'Arial', 'Arial MT', sans-serif;
                 font-size: 16pt;
                 line-height: 1.5;
-                margin: 2cm;
+                margin: 3cm 2cm 2cm 3cm; /* superior 3, direita 2, inferior 2, esquerda 3 */
             }
         </style>
     </head>
@@ -451,9 +451,19 @@ document.getElementById('btnPdfToDoc').onclick = () => withLoading('btnPdfToDoc'
         <pre style="font-family: 'Arial', 'Arial MT', sans-serif; font-size: 16pt; white-space: pre-wrap; margin:0;">${escapeHtml(fullText)}</pre>
     </body>
     </html>`;
-    saveAs(new Blob([formattedHtml], { type: 'application/msword' }), 'documento_formatado.doc');
-    document.getElementById('pdfToDocStatus').innerText = '✅ DOC gerado com fonte Arial MT, tamanho 16.';
+    saveAs(new Blob([formattedHtml], { type: 'application/msword' }), 'documento_abnt.doc');
+    document.getElementById('pdfToDocStatus').innerText = '✅ DOC gerado com margens ABNT e fonte Arial MT 16.';
 });
+
+// Função auxiliar para escapar caracteres HTML
+function escapeHtml(str) {
+    return str.replace(/[&<>]/g, function(m) {
+        if (m === '&') return '&amp;';
+        if (m === '<') return '&lt;';
+        if (m === '>') return '&gt;';
+        return m;
+    });
+}
 
 // Função auxiliar para escapar caracteres HTML
 function escapeHtml(str) {

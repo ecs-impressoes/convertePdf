@@ -11,9 +11,9 @@
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://www.seusite.com/">
     
-    <!-- FAVICON - Gerado dinamicamente com Canvas -->
-    <link rel="icon" type="image/png" id="dynamicFavicon">
-    <link rel="shortcut icon" type="image/png" id="dynamicShortcut">
+    <!-- FAVICON - Usando seu logo.png -->
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="shortcut icon" type="image/png" href="logo.png">
     
     <!-- Google AdSense com seu ID -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6101697624775208" crossorigin="anonymous"></script>
@@ -32,103 +32,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script>
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
-        
-        // Função para gerar o favicon dinamicamente
-        function generateFavicon() {
-            const canvas = document.createElement('canvas');
-            canvas.width = 64;
-            canvas.height = 64;
-            const ctx = canvas.getContext('2d');
-            
-            // Fundo gradiente vermelho/laranja (mesmo estilo da top-bar)
-            const gradient = ctx.createLinearGradient(0, 0, 64, 64);
-            gradient.addColorStop(0, '#b2221c');
-            gradient.addColorStop(1, '#d43f1f');
-            ctx.fillStyle = gradient;
-            ctx.fillRect(0, 0, 64, 64);
-            
-            // Borda arredondada (efeito visual)
-            ctx.save();
-            ctx.beginPath();
-            ctx.roundRect(0, 0, 64, 64, 12);
-            ctx.clip();
-            
-            // Desenhar um símbolo de ferramenta/engrenagem simples
-            ctx.fillStyle = '#ffffff';
-            ctx.shadowColor = 'rgba(0,0,0,0.3)';
-            ctx.shadowBlur = 2;
-            
-            // Letra C (ConvTools)
-            ctx.font = 'bold 32px "Segoe UI", "Inter", system-ui';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillStyle = '#ffffff';
-            ctx.fillText('C', 32, 32);
-            
-            // Pequeno detalhe: um ícone de ferramenta ao lado
-            ctx.font = '20px "Font Awesome 6 Free"';
-            ctx.fillStyle = '#ffd966';
-            ctx.fillText('\uf0ad', 48, 48); // ícone de ferramenta (fa-tools)
-            
-            ctx.shadowBlur = 0;
-            ctx.restore();
-            
-            // Adicionar um pequeno destaque branco
-            ctx.beginPath();
-            ctx.strokeStyle = 'rgba(255,255,255,0.3)';
-            ctx.lineWidth = 1.5;
-            ctx.roundRect(2, 2, 60, 60, 10);
-            ctx.stroke();
-            
-            // Converter para URL de dados e aplicar como favicon
-            const faviconUrl = canvas.toDataURL('image/png');
-            
-            const existingFavicon = document.querySelector('link[rel="icon"]');
-            const existingShortcut = document.querySelector('link[rel="shortcut icon"]');
-            
-            if (existingFavicon) {
-                existingFavicon.href = faviconUrl;
-            } else {
-                const link = document.createElement('link');
-                link.rel = 'icon';
-                link.type = 'image/png';
-                link.href = faviconUrl;
-                document.head.appendChild(link);
-            }
-            
-            if (existingShortcut) {
-                existingShortcut.href = faviconUrl;
-            } else {
-                const linkShort = document.createElement('link');
-                linkShort.rel = 'shortcut icon';
-                linkShort.type = 'image/png';
-                linkShort.href = faviconUrl;
-                document.head.appendChild(linkShort);
-            }
-        }
-        
-        // Helper para roundRect
-        if (!CanvasRenderingContext2D.prototype.roundRect) {
-            CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, r) {
-                if (w < 2 * r) r = w / 2;
-                if (h < 2 * r) r = h / 2;
-                this.moveTo(x+r, y);
-                this.lineTo(x+w-r, y);
-                this.quadraticCurveTo(x+w, y, x+w, y+r);
-                this.lineTo(x+w, y+h-r);
-                this.quadraticCurveTo(x+w, y+h, x+w-r, y+h);
-                this.lineTo(x+r, y+h);
-                this.quadraticCurveTo(x, y+h, x, y+h-r);
-                this.lineTo(x, y+r);
-                this.quadraticCurveTo(x, y, x+r, y);
-                return this;
-            };
-        }
-        
-        // Gerar favicon quando a página carregar
-        window.addEventListener('DOMContentLoaded', () => {
-            generateFavicon();
-        });
     </script>
     
     <style>
@@ -178,7 +81,6 @@
             width: auto;
             max-height: 65px;
             object-fit: contain;
-            filter: brightness(0) invert(1);
         }
 
         .logo-area span {
@@ -507,14 +409,22 @@
                 font-size: 1.3rem;
             }
         }
+        
+        /* Estilo para quando a imagem do logo não carregar */
+        .logo-area img.error-logo {
+            display: none;
+        }
+        
+        .logo-area img.error-logo + span {
+            margin-left: 0;
+        }
     </style>
 </head>
 <body>
     <!-- BARRA VERMELHA COM LOGO -->
     <div class="top-bar">
         <div class="logo-area">
-            <i class="fas fa-tools" style="font-size: 32px; color: white;"></i>
-            <span style="font-weight: 800; font-size: 1.4rem;">ConvTools</span>
+            <img src="logo.png" alt="ConvTools Logo" id="siteLogo" onerror="this.classList.add('error-logo'); this.style.display='none';">
             <span>100% offline & seguro</span>
         </div>
         <div class="trust-badge">
@@ -612,6 +522,24 @@
                     setTimeout(() => copyBtn.innerHTML = '<i class="far fa-copy"></i> Copiar', 2000);
                 });
             });
+            
+            // Verificar se o logo existe e ajustar fallback
+            const logoImg = document.getElementById('siteLogo');
+            if (logoImg) {
+                logoImg.onerror = function() {
+                    this.style.display = 'none';
+                    // Adicionar texto alternativo se necessário
+                    const logoArea = document.querySelector('.logo-area');
+                    if (logoArea && !logoArea.querySelector('.logo-fallback')) {
+                        const fallback = document.createElement('i');
+                        fallback.className = 'fas fa-tools';
+                        fallback.style.fontSize = '32px';
+                        fallback.style.color = 'white';
+                        fallback.style.marginRight = '10px';
+                        logoArea.insertBefore(fallback, logoArea.firstChild);
+                    }
+                };
+            }
         });
 
         // ========== FUNÇÕES CORRIGIDAS ==========

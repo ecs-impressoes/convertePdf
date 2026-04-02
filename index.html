@@ -212,29 +212,55 @@
             border-color: rgba(28, 110, 143, 0.3);
         }
 
+        /* NOVO ESTILO PARA O HEADER COM BARRA DE DESTAQUE E ÍCONES MAIORES */
         .card-header {
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 1rem;
+            gap: 16px;
+            margin-bottom: 1.2rem;
+            position: relative;
+            padding-bottom: 12px;
+            border-bottom: 3px solid #F3B33D;
         }
 
         .card-header .icon {
             background: linear-gradient(135deg, #f0f5fa, #e6edf4);
-            width: 50px;
-            height: 50px;
+            width: 65px;
+            height: 65px;
             border-radius: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #1C6E8F;
-            font-size: 1.6rem;
+            font-size: 2.2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+
+        .card:hover .card-header .icon {
+            transform: scale(1.05);
+            background: linear-gradient(135deg, #e8f0f8, #dfe9f2);
+            color: #E68A2E;
         }
 
         .card-header h3 {
-            font-size: 1.35rem;
+            font-size: 1.5rem;
             font-weight: 700;
             color: #1a3b4e;
+            letter-spacing: -0.3px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .card-header h3::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background: #F3B33D;
+            border-radius: 3px;
         }
 
         .card-desc {
@@ -357,6 +383,11 @@
             border: 1px solid #ffe1b3;
         }
 
+        .donation-card .card-header .icon {
+            background: linear-gradient(135deg, #fff5e6, #ffe8d4);
+            color: #E68A2E;
+        }
+
         .pix-qr-container {
             display: flex;
             flex-direction: column;
@@ -423,6 +454,29 @@
             display: inline-block;
             margin-bottom: 0.8rem;
         }
+
+        /* Responsividade para os novos ícones maiores */
+        @media (max-width: 768px) {
+            .card-header .icon {
+                width: 55px;
+                height: 55px;
+                font-size: 1.8rem;
+            }
+            .card-header h3 {
+                font-size: 1.3rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .card-header .icon {
+                width: 48px;
+                height: 48px;
+                font-size: 1.5rem;
+            }
+            .card-header h3 {
+                font-size: 1.2rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -458,41 +512,146 @@
 
         <div class="tool-grid">
             <!-- UNIR PDF -->
-            <div class="card"><div class="card-header"><div class="icon"><i class="fas fa-layer-group"></i></div><h3>Unir PDF</h3></div><div class="card-desc">Combine vários PDFs em um único arquivo.</div><div class="file-zone"><i class="fas fa-cloud-upload-alt"></i><input type="file" id="mergeInput" multiple accept=".pdf" /></div><button class="btn-primary" onclick="mergePDF()"><i class="fas fa-object-group"></i> Unir arquivos</button><div class="status" id="mergeStatus"></div></div>
+            <div class="card">
+                <div class="card-header">
+                    <div class="icon"><i class="fas fa-layer-group"></i></div>
+                    <h3>Unir PDF</h3>
+                </div>
+                <div class="card-desc">Combine vários PDFs em um único arquivo.</div>
+                <div class="file-zone"><i class="fas fa-cloud-upload-alt"></i><input type="file" id="mergeInput" multiple accept=".pdf" /></div>
+                <button class="btn-primary" onclick="mergePDF()"><i class="fas fa-object-group"></i> Unir arquivos</button>
+                <div class="status" id="mergeStatus"></div>
+            </div>
 
             <!-- PDF → JPG -->
-            <div class="card"><div class="card-header"><div class="icon"><i class="fas fa-camera-retro"></i></div><h3>PDF → JPG</h3></div><div class="card-desc">Extraia cada página como imagem. +2 páginas = ZIP.</div><div class="file-zone"><i class="fas fa-file-pdf"></i><input type="file" id="pdfToJpgInput" accept=".pdf" /></div><button class="btn-primary" onclick="pdfToJpg()"><i class="fas fa-image"></i> Gerar JPGs</button><div class="status" id="pdfToJpgStatus"></div></div>
+            <div class="card">
+                <div class="card-header">
+                    <div class="icon"><i class="fas fa-camera-retro"></i></div>
+                    <h3>PDF → JPG</h3>
+                </div>
+                <div class="card-desc">Extraia cada página como imagem. +2 páginas = ZIP.</div>
+                <div class="file-zone"><i class="fas fa-file-pdf"></i><input type="file" id="pdfToJpgInput" accept=".pdf" /></div>
+                <button class="btn-primary" onclick="pdfToJpg()"><i class="fas fa-image"></i> Gerar JPGs</button>
+                <div class="status" id="pdfToJpgStatus"></div>
+            </div>
 
             <!-- EXTRAIR PÁGINAS -->
-            <div class="card"><div class="card-header"><div class="icon"><i class="fas fa-cut"></i></div><h3>Extrair páginas</h3></div><div class="card-desc">Cada página em PDF separado → ZIP completo.</div><div class="file-zone"><i class="fas fa-file-pdf"></i><input type="file" id="extractInput" accept=".pdf" /></div><button class="btn-primary" onclick="extractAllPagesToZip()"><i class="fas fa-file-archive"></i> Extrair todas → ZIP</button><div class="status" id="extractStatus"></div></div>
+            <div class="card">
+                <div class="card-header">
+                    <div class="icon"><i class="fas fa-cut"></i></div>
+                    <h3>Extrair páginas</h3>
+                </div>
+                <div class="card-desc">Cada página em PDF separado → ZIP completo.</div>
+                <div class="file-zone"><i class="fas fa-file-pdf"></i><input type="file" id="extractInput" accept=".pdf" /></div>
+                <button class="btn-primary" onclick="extractAllPagesToZip()"><i class="fas fa-file-archive"></i> Extrair todas → ZIP</button>
+                <div class="status" id="extractStatus"></div>
+            </div>
 
             <!-- PDF → DOC -->
-            <div class="card"><div class="card-header"><div class="icon"><i class="fas fa-file-word"></i></div><h3>PDF → DOC</h3></div><div class="card-desc">Extrai texto e salva como .doc simples.</div><div class="file-zone"><i class="fas fa-file-pdf"></i><input type="file" id="pdfToDocInput" accept=".pdf" /></div><button class="btn-primary" onclick="pdfToDoc()"><i class="fas fa-file-export"></i> Converter</button><div class="status" id="pdfToDocStatus"></div></div>
+            <div class="card">
+                <div class="card-header">
+                    <div class="icon"><i class="fas fa-file-word"></i></div>
+                    <h3>PDF → DOC</h3>
+                </div>
+                <div class="card-desc">Extrai texto e salva como .doc simples.</div>
+                <div class="file-zone"><i class="fas fa-file-pdf"></i><input type="file" id="pdfToDocInput" accept=".pdf" /></div>
+                <button class="btn-primary" onclick="pdfToDoc()"><i class="fas fa-file-export"></i> Converter</button>
+                <div class="status" id="pdfToDocStatus"></div>
+            </div>
 
             <!-- DOC → PDF -->
-            <div class="card"><div class="card-header"><div class="icon"><i class="fas fa-file-pdf"></i></div><h3>DOC → PDF</h3></div><div class="card-desc">Converte .docx (com formatação) ou .doc.</div><div class="file-zone"><i class="fas fa-file-word"></i><input type="file" id="docToPdfInput" accept=".docx,.doc" /></div><button class="btn-primary" onclick="docToPdf()"><i class="fas fa-file-pdf"></i> Converter</button><div class="status" id="docToPdfStatus"></div></div>
+            <div class="card">
+                <div class="card-header">
+                    <div class="icon"><i class="fas fa-file-pdf"></i></div>
+                    <h3>DOC → PDF</h3>
+                </div>
+                <div class="card-desc">Converte .docx (com formatação) ou .doc.</div>
+                <div class="file-zone"><i class="fas fa-file-word"></i><input type="file" id="docToPdfInput" accept=".docx,.doc" /></div>
+                <button class="btn-primary" onclick="docToPdf()"><i class="fas fa-file-pdf"></i> Converter</button>
+                <div class="status" id="docToPdfStatus"></div>
+            </div>
 
             <!-- Excel → PDF -->
-            <div class="card"><div class="card-header"><div class="icon"><i class="fas fa-table"></i></div><h3>Excel → PDF</h3></div><div class="card-desc">Planilha para PDF com formatação.</div><div class="file-zone"><i class="fas fa-file-excel"></i><input type="file" id="excelToPdfInput" accept=".xlsx,.xls,.csv" /></div><button class="btn-primary" onclick="excelToPdf()"><i class="fas fa-file-pdf"></i> Converter</button><div class="status" id="excelToPdfStatus"></div></div>
+            <div class="card">
+                <div class="card-header">
+                    <div class="icon"><i class="fas fa-table"></i></div>
+                    <h3>Excel → PDF</h3>
+                </div>
+                <div class="card-desc">Planilha para PDF com formatação.</div>
+                <div class="file-zone"><i class="fas fa-file-excel"></i><input type="file" id="excelToPdfInput" accept=".xlsx,.xls,.csv" /></div>
+                <button class="btn-primary" onclick="excelToPdf()"><i class="fas fa-file-pdf"></i> Converter</button>
+                <div class="status" id="excelToPdfStatus"></div>
+            </div>
 
             <!-- JPG → PDF -->
-            <div class="card"><div class="card-header"><div class="icon"><i class="fas fa-images"></i></div><h3>JPG → PDF</h3></div><div class="card-desc">Agrupe imagens em um PDF único.</div><div class="file-zone"><i class="fas fa-image"></i><input type="file" id="jpgToPdfInput" multiple accept="image/*" /></div><button class="btn-primary" onclick="jpgToPdf()"><i class="fas fa-layer-group"></i> Criar PDF</button><div class="status" id="jpgToPdfStatus"></div></div>
+            <div class="card">
+                <div class="card-header">
+                    <div class="icon"><i class="fas fa-images"></i></div>
+                    <h3>JPG → PDF</h3>
+                </div>
+                <div class="card-desc">Agrupe imagens em um PDF único.</div>
+                <div class="file-zone"><i class="fas fa-image"></i><input type="file" id="jpgToPdfInput" multiple accept="image/*" /></div>
+                <button class="btn-primary" onclick="jpgToPdf()"><i class="fas fa-layer-group"></i> Criar PDF</button>
+                <div class="status" id="jpgToPdfStatus"></div>
+            </div>
 
             <!-- HTML → PDF -->
-            <div class="card"><div class="card-header"><div class="icon"><i class="fas fa-code"></i></div><h3>HTML → PDF</h3></div><div class="card-desc">Arquivo .html convertido para PDF.</div><div class="file-zone"><i class="fas fa-file-code"></i><input type="file" id="htmlToPdfInput" accept=".html,.htm" /></div><button class="btn-primary" onclick="htmlToPdf()"><i class="fas fa-file-pdf"></i> Converter</button><div class="status" id="htmlToPdfStatus"></div></div>
+            <div class="card">
+                <div class="card-header">
+                    <div class="icon"><i class="fas fa-code"></i></div>
+                    <h3>HTML → PDF</h3>
+                </div>
+                <div class="card-desc">Arquivo .html convertido para PDF.</div>
+                <div class="file-zone"><i class="fas fa-file-code"></i><input type="file" id="htmlToPdfInput" accept=".html,.htm" /></div>
+                <button class="btn-primary" onclick="htmlToPdf()"><i class="fas fa-file-pdf"></i> Converter</button>
+                <div class="status" id="htmlToPdfStatus"></div>
+            </div>
 
             <!-- NUMERAR PDF -->
-            <div class="card"><div class="card-header"><div class="icon"><i class="fas fa-hashtag"></i></div><h3>Numerar PDF</h3></div><div class="card-desc">Adicione números de página.</div><div class="file-zone"><i class="fas fa-file-pdf"></i><input type="file" id="numberPdfInput" accept=".pdf" /></div><div class="extra-control"><label><i class="fas fa-arrows-alt"></i> Posição:</label><div class="radio-group"><label><input type="radio" name="numberPos" value="top-right" checked> topo dir.</label><label><input type="radio" name="numberPos" value="bottom-left"> inf. esq.</label><label><input type="radio" name="numberPos" value="bottom-right"> inf. dir.</label></div></div><button class="btn-primary" onclick="numberPdf()"><i class="fas fa-pencil-alt"></i> Numerar</button><div class="status" id="numberPdfStatus"></div></div>
+            <div class="card">
+                <div class="card-header">
+                    <div class="icon"><i class="fas fa-hashtag"></i></div>
+                    <h3>Numerar PDF</h3>
+                </div>
+                <div class="card-desc">Adicione números de página.</div>
+                <div class="file-zone"><i class="fas fa-file-pdf"></i><input type="file" id="numberPdfInput" accept=".pdf" /></div>
+                <div class="extra-control"><label><i class="fas fa-arrows-alt"></i> Posição:</label><div class="radio-group"><label><input type="radio" name="numberPos" value="top-right" checked> topo dir.</label><label><input type="radio" name="numberPos" value="bottom-left"> inf. esq.</label><label><input type="radio" name="numberPos" value="bottom-right"> inf. dir.</label></div></div>
+                <button class="btn-primary" onclick="numberPdf()"><i class="fas fa-pencil-alt"></i> Numerar</button>
+                <div class="status" id="numberPdfStatus"></div>
+            </div>
 
             <!-- ORGANIZAR PDF -->
-            <div class="card"><div class="card-header"><div class="icon"><i class="fas fa-sort-amount-up"></i></div><h3>Organizar PDF</h3></div><div class="card-desc">Reordenar páginas: ex: 4,1,3,2</div><div class="file-zone"><i class="fas fa-file-pdf"></i><input type="file" id="organizeInput" accept=".pdf" /></div><div class="extra-control"><i class="fas fa-sort"></i><input type="text" id="organizeOrder" placeholder="ex: 4,1,3,2" style="flex:2;" /></div><button class="btn-primary" onclick="organizePdf()"><i class="fas fa-arrows-alt-v"></i> Reordenar</button><div class="status" id="organizeStatus"></div></div>
+            <div class="card">
+                <div class="card-header">
+                    <div class="icon"><i class="fas fa-sort-amount-up"></i></div>
+                    <h3>Organizar PDF</h3>
+                </div>
+                <div class="card-desc">Reordenar páginas: ex: 4,1,3,2</div>
+                <div class="file-zone"><i class="fas fa-file-pdf"></i><input type="file" id="organizeInput" accept=".pdf" /></div>
+                <div class="extra-control"><i class="fas fa-sort"></i><input type="text" id="organizeOrder" placeholder="ex: 4,1,3,2" style="flex:2;" /></div>
+                <button class="btn-primary" onclick="organizePdf()"><i class="fas fa-arrows-alt-v"></i> Reordenar</button>
+                <div class="status" id="organizeStatus"></div>
+            </div>
 
             <!-- TRADUZIR PDF -->
-            <div class="card"><div class="card-header"><div class="icon"><i class="fas fa-language"></i></div><h3>Traduzir PDF</h3></div><div class="card-desc">Extrai texto e traduz via MyMemory.</div><div class="file-zone"><i class="fas fa-file-pdf"></i><input type="file" id="translatePdfInput" accept=".pdf" /></div><div class="extra-control"><label><i class="fas fa-globe"></i> Origem:</label><select id="sourceLang"><option value="en">Inglês</option><option value="pt">Português</option><option value="es">Espanhol</option><option value="fr">Francês</option><option value="de">Alemão</option></select><i class="fas fa-arrow-right"></i><label>Destino:</label><select id="targetLang"><option value="pt">Português</option><option value="en">Inglês</option><option value="es">Espanhol</option><option value="fr">Francês</option><option value="de">Alemão</option></select></div><button class="btn-primary" onclick="translatePdf()"><i class="fas fa-language"></i> Traduzir</button><div class="status" id="translateStatus"></div></div>
+            <div class="card">
+                <div class="card-header">
+                    <div class="icon"><i class="fas fa-language"></i></div>
+                    <h3>Traduzir PDF</h3>
+                </div>
+                <div class="card-desc">Extrai texto e traduz via MyMemory.</div>
+                <div class="file-zone"><i class="fas fa-file-pdf"></i><input type="file" id="translatePdfInput" accept=".pdf" /></div>
+                <div class="extra-control"><label><i class="fas fa-globe"></i> Origem:</label><select id="sourceLang"><option value="en">Inglês</option><option value="pt">Português</option><option value="es">Espanhol</option><option value="fr">Francês</option><option value="de">Alemão</option></select><i class="fas fa-arrow-right"></i><label>Destino:</label><select id="targetLang"><option value="pt">Português</option><option value="en">Inglês</option><option value="es">Espanhol</option><option value="fr">Francês</option><option value="de">Alemão</option></select></div>
+                <button class="btn-primary" onclick="translatePdf()"><i class="fas fa-language"></i> Traduzir</button>
+                <div class="status" id="translateStatus"></div>
+            </div>
 
             <!-- CARD DOAÇÃO -->
             <div class="card donation-card">
-                <div class="card-header"><div class="icon"><i class="fas fa-heart" style="color:#E68A2E;"></i></div><h3>Apoie o projeto ❤️</h3></div>
+                <div class="card-header">
+                    <div class="icon"><i class="fas fa-heart"></i></div>
+                    <h3>Apoie o projeto ❤️</h3>
+                </div>
                 <div class="card-desc">Ferramentas 100% gratuitas e sem servidor. Se gostou, qualquer valor ajuda!</div>
                 <div class="pix-qr-container">
                     <div id="donationQrCode" style="display: flex; justify-content: center;"></div>
@@ -532,7 +691,7 @@
             });
         });
 
-        // ========== FUNÇÕES DE CONVERSÃO ==========
+        // ========== FUNÇÕES DE CONVERSÃO (mantidas do código anterior) ==========
         async function mergePDF() {
             const input = document.getElementById('mergeInput');
             const status = document.getElementById('mergeStatus');
